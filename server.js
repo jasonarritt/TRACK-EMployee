@@ -39,11 +39,12 @@ async function mainMenu() {
 
     case "View all roles":
       console.log("You have chosen View all roles!");
+      viewAllRoles();
       break;
 
     case "View all employees":
       console.log("You have chosen View all employees!");
-
+      viewAllEmployees();
       break;
 
     case "Add a department":
@@ -87,11 +88,31 @@ function viewAllDepartments() {
 
 // WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-function viewAllRoles() {}
+function viewAllRoles() {
+  console.log("You have entered viewAllRoles");
+  db.query(`SELECT * FROM role`, function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+      mainMenu();
+    }
+  });
+}
 
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-function viewAllEmployees() {}
+function viewAllEmployees() {
+  console.log("You have entered viewAllEmployees");
+  db.query(`SELECT * FROM employee`, function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+      mainMenu();
+    }
+  });
+}
 
 // WHEN I choose to add a department
 // THEN I am prompted to enter the name of the department and that department is added to the database
