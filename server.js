@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
-// const mysql = require("mysql");
-// const ctable = require("console.table");
+// const mysql = require("mysql2");
+const ctable = require("console.table");
 const express = require("express");
 const db = require("./db/connection");
 
@@ -27,12 +27,14 @@ async function mainMenu() {
       "Add a role",
       "Add an employee",
       "Update an employee role",
+      "Exit",
     ],
   });
 
   switch (mainMenuChoice) {
     case "View all departments":
       console.log("You have chosen View all departments!");
+      viewAllDepartments();
       break;
 
     case "View all roles":
@@ -41,7 +43,8 @@ async function mainMenu() {
 
     case "View all employees":
       console.log("You have chosen View all employees!");
-      return;
+
+      break;
 
     case "Add a department":
       console.log("You have chosen Add a department!");
@@ -53,10 +56,14 @@ async function mainMenu() {
 
     case "Add an employee":
       console.log("You have chosen Add an employee!");
-      return;
+      break;
 
     case "Update an employee role":
       console.log("You have chosen Update an employee role!");
+      break;
+
+    case "Exit":
+      console.log("You have chosen Exit TRACK-EMployee. Good bye!");
       return;
 
     default:
@@ -66,7 +73,17 @@ async function mainMenu() {
 
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
-function viewAllDepartments() {}
+function viewAllDepartments() {
+  console.log("You have entered viewAllDepartments");
+  db.query(`SELECT * FROM department`, function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+      mainMenu();
+    }
+  });
+}
 
 // WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
@@ -91,6 +108,11 @@ function addEmployee() {}
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 function updateRole() {}
+
+// Default response for any other request (Not Found)
+app.use((req, res) => {
+  res.status(404).end();
+});
 
 // Start server after DB connection
 db.connect((err) => {
