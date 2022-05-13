@@ -14,7 +14,7 @@ CREATE TABLE role (
 -- title: VARCHAR(30) to hold role title
   title VARCHAR(30) NOT NULL,
 -- salary: DECIMAL to hold role salary
-  salary DECIMAL(5,2) NOT NULL,
+  salary DECIMAL(10,2) NOT NULL,
 -- department_id: INT to hold reference to department role belongs to
   department_id INTEGER NOT NULL,
   FOREIGN KEY (department_id) REFERENCES department(id)
@@ -31,7 +31,7 @@ CREATE TABLE employee (
 -- role_id: INT to hold reference to employee role
   role_id INTEGER NOT NULL,
 -- manager_id: INT to hold reference to another employee that is the manager of the current employee (null if the employee has no manager)
-  manager_id INTEGER NOT NULL,
+  manager_id INTEGER,
   FOREIGN KEY (role_id) REFERENCES role(id),
   FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
