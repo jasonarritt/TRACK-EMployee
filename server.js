@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
-const mysql = require("mysql");
-const ctable = require("console.table");
+// const mysql = require("mysql");
+// const ctable = require("console.table");
 const express = require("express");
 const db = require("./db/connection");
 
@@ -14,7 +14,55 @@ app.use(express.json());
 // GIVEN a command-line application that accepts user input
 // WHEN I start the application
 // THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-function mainMenu() {}
+async function mainMenu() {
+  const { mainMenuChoice } = await inquirer.prompt({
+    type: "list",
+    name: "mainMenuChoice",
+    message: "Please select an option:",
+    choices: [
+      "View all departments",
+      "View all roles",
+      "View all employees",
+      "Add a department",
+      "Add a role",
+      "Add an employee",
+      "Update an employee role",
+    ],
+  });
+
+  switch (mainMenuChoice) {
+    case "View all departments":
+      console.log("You have chosen View all departments!");
+      break;
+
+    case "View all roles":
+      console.log("You have chosen View all roles!");
+      break;
+
+    case "View all employees":
+      console.log("You have chosen View all employees!");
+      return;
+
+    case "Add a department":
+      console.log("You have chosen Add a department!");
+      break;
+
+    case "Add a role":
+      console.log("You have chosen Add a role!");
+      break;
+
+    case "Add an employee":
+      console.log("You have chosen Add an employee!");
+      return;
+
+    case "Update an employee role":
+      console.log("You have chosen Update an employee role!");
+      return;
+
+    default:
+      return;
+  }
+}
 
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
@@ -50,5 +98,6 @@ db.connect((err) => {
   console.log("Database connected.");
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    mainMenu();
   });
 });
