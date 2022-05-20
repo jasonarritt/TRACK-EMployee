@@ -54,6 +54,7 @@ async function mainMenu() {
 
     case "Add a role":
       console.log("You have chosen Add a role!");
+      addRole();
       break;
 
     case "Add an employee":
@@ -155,6 +156,68 @@ function addDepartment() {
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
 async function addRole() {
   console.log("You have entered addRole");
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "newRoleTitle",
+        message: "What is the title of the role you would like to add?",
+        validate: (response) => {
+          if (response) {
+            return true;
+          } else {
+            console.log(
+              "Please enter the title of the role you would like to add!"
+            );
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "newRoleSalary",
+        message: "What is the salary of the role of this new role?",
+        validate: (response) => {
+          if (!isNaN(response)) {
+            return true;
+          } else {
+            console.log(
+              "Please enter the salary of this new role as a number!"
+            );
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "newRoleDepartment",
+        message: "What is the department of the role of this new role?",
+        validate: (response) => {
+          if (response) {
+            return true;
+          } else {
+            console.log(
+              "Please enter the department of this new role as a number!"
+            );
+            return false;
+          }
+        },
+      },
+    ])
+    .then((response) => {
+      console.log(response);
+      db.query(
+        `INSERT INTO role (title, salary, department_id) VALUES ("${response.newRoleTitle}", "${response.newRoleSalary}", "${response.newRoleDepartment}")`,
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+            mainMenu();
+          }
+        }
+      );
+    });
 }
 
 // WHEN I choose to add an employee
