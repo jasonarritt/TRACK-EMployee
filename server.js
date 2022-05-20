@@ -49,6 +49,7 @@ async function mainMenu() {
 
     case "Add a department":
       console.log("You have chosen Add a department!");
+      addDepartment();
       break;
 
     case "Add a role":
@@ -116,19 +117,57 @@ function viewAllEmployees() {
 
 // WHEN I choose to add a department
 // THEN I am prompted to enter the name of the department and that department is added to the database
-function addDepartment() {}
+function addDepartment() {
+  console.log("You have entered addDepartment");
+  inquirer
+    .prompt({
+      type: "input",
+      name: "newDepartment",
+      message: "What is the name of the department you would like to add?",
+      validate: (response) => {
+        if (response) {
+          return true;
+        } else {
+          console.log(
+            "Please enter the name of the department you would like to add!"
+          );
+          return false;
+        }
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      db.query(
+        `INSERT INTO department (name) VALUES ("${response.newDepartment}")`,
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+            mainMenu();
+          }
+        }
+      );
+    });
+}
 
 // WHEN I choose to add a role
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-function addRole() {}
+async function addRole() {
+  console.log("You have entered addRole");
+}
 
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-function addEmployee() {}
+async function addEmployee() {
+  console.log("You have entered addEmployee");
+}
 
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database
-function updateRole() {}
+async function updateRole() {
+  console.log("You have entered updateRole");
+}
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
