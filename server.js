@@ -59,10 +59,12 @@ async function mainMenu() {
 
     case "Add an employee":
       console.log("You have chosen Add an employee!");
+      addEmployee();
       break;
 
     case "Update an employee role":
       console.log("You have chosen Update an employee role!");
+      updateRole();
       break;
 
     case "Exit":
@@ -224,6 +226,75 @@ async function addRole() {
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 async function addEmployee() {
   console.log("You have entered addEmployee");
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "newEmployeeFirstName",
+        message:
+          "What is the first name of the employee you would like to add?",
+        validate: (response) => {
+          if (response) {
+            return true;
+          } else {
+            console.log(
+              "Please enter the first name of the employee you would like to add!"
+            );
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "newEmployeeLastName",
+        message: "What is the last name of the employee you would like to add?",
+        validate: (response) => {
+          if (response) {
+            return true;
+          } else {
+            console.log(
+              "Please enter the last name of the employee you would like to add!"
+            );
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "newEmployeeRole",
+        message: "What is the role of this new employee?",
+        validate: (response) => {
+          if (!isNaN(response)) {
+            return true;
+          } else {
+            console.log("Please enter the role of this new employee!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "newEmployeeManager",
+        message: "Who is the manager of this new employee?",
+      },
+    ])
+    .then((response) => {
+      console.log(response);
+      // if ((response.newEmployeeManager = "")) {
+      //   response.newEmployeeManager = 0;
+      // }
+      db.query(
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${response.newEmployeeFirstName}", "${response.newEmployeeLastName}", "${response.newEmployeeRole}", "${response.newEmployeeManager}")`,
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+            mainMenu();
+          }
+        }
+      );
+    });
 }
 
 // WHEN I choose to update an employee role
