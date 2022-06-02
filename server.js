@@ -95,7 +95,7 @@ function viewAllDepartments() {
 function viewAllRoles() {
   console.log("You have entered viewAllRoles");
   db.query(
-    `SELECT r.id, r.title, r.salary
+    `SELECT r.id, r.title, r.salary, d.name AS department
     FROM role AS r
     LEFT JOIN department AS d ON r.department_id = d.id`,
     function (err, res) {
@@ -114,7 +114,7 @@ function viewAllRoles() {
 function viewAllEmployees() {
   console.log("You have entered viewAllEmployees");
   db.query(
-    `SELECT e.id, e.first_name, e.last_name, r.title, r.salary,COALESCE( CONCAT(m.first_name, " ", m.last_name),'') AS manager FROM employee AS e LEFT JOIN role AS r ON e.role_id = r.id LEFT JOIN department AS d ON r.department_id = d.id LEFT JOIN employee AS m ON m.id = e.manager_id`,
+    `SELECT e.id, e.first_name, e.last_name, r.title, r.salary,COALESCE( CONCAT(m.first_name, " ", m.last_name),'') AS manager, d.name AS department FROM employee AS e LEFT JOIN role AS r ON e.role_id = r.id LEFT JOIN department AS d ON r.department_id = d.id LEFT JOIN employee AS m ON m.id = e.manager_id`,
     function (err, res) {
       if (err) {
         throw err;
@@ -321,6 +321,8 @@ async function addEmployee() {
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 async function updateRole() {
   console.log("You have entered updateRole");
+  let employeeArray = [];
+  db.query(`SELECT e.id, e.first_name, e.last_name, e.`);
 }
 
 // Default response for any other request (Not Found)
