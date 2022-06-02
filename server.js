@@ -94,28 +94,36 @@ function viewAllDepartments() {
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
 function viewAllRoles() {
   console.log("You have entered viewAllRoles");
-  db.query(`SELECT * FROM role`, function (err, res) {
-    if (err) {
-      throw err;
-    } else {
-      console.table(res);
-      mainMenu();
+  db.query(
+    `SELECT r.id, r.title, r.salary
+    FROM role AS r
+    LEFT JOIN department AS d ON r.department_id = d.id`,
+    function (err, res) {
+      if (err) {
+        throw err;
+      } else {
+        console.table(res);
+        mainMenu();
+      }
     }
-  });
+  );
 }
 
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 function viewAllEmployees() {
   console.log("You have entered viewAllEmployees");
-  db.query(`SELECT * FROM employee`, function (err, res) {
-    if (err) {
-      throw err;
-    } else {
-      console.table(res);
-      mainMenu();
+  db.query(
+    `SELECT e.id, e.first_name, e.last_name, r.title, r.salary,COALESCE( CONCAT(m.first_name, " ", m.last_name),'') AS manager FROM employee AS e LEFT JOIN role AS r ON e.role_id = r.id LEFT JOIN department AS d ON r.department_id = d.id LEFT JOIN employee AS m ON m.id = e.manager_id`,
+    function (err, res) {
+      if (err) {
+        throw err;
+      } else {
+        console.table(res);
+        mainMenu();
+      }
     }
-  });
+  );
 }
 
 // WHEN I choose to add a department
@@ -262,12 +270,14 @@ async function addEmployee() {
       {
         type: "input",
         name: "newEmployeeRole",
-        message: "What is the role of this new employee?",
+        message: "What is the role of this new employee (as an integer)?",
         validate: (response) => {
           if (!isNaN(response)) {
             return true;
           } else {
-            console.log("Please enter the role of this new employee!");
+            console.log(
+              "Please enter the role of this new employee (as an integer)!"
+            );
             return false;
           }
         },
@@ -275,7 +285,17 @@ async function addEmployee() {
       {
         type: "input",
         name: "newEmployeeManager",
-        message: "Who is the manager of this new employee?",
+        message: "What is this new employee's manager's ID (as an integer)?",
+        validate: (response) => {
+          if (response) {
+            return true;
+          } else {
+            console.log(
+              "Please enter this new employee's manager's ID (as an integer)!"
+            );
+            return false;
+          }
+        },
       },
     ])
     .then((response) => {
