@@ -322,7 +322,60 @@ async function addEmployee() {
 async function updateRole() {
   console.log("You have entered updateRole");
   let employeeArray = [];
-  db.query(`SELECT e.id, e.first_name, e.last_name, e.`);
+  let roleArray = [];
+  db.query(
+    `SELECT e.id, e.first_name, e.last_name
+  FROM employee AS e
+  `,
+    function (err, res) {
+      if (err) {
+        throw err;
+      } else {
+        console.table(res);
+        res.forEach((employee) =>
+          employeeArray.push(
+            `${employee.id} ${employee.first_name} ${employee.last_name}`
+          )
+        );
+        // console.log(employeeArray);
+      }
+    }
+  );
+
+  db.query(
+    `SELECT r.id, r.title
+  FROM ROLE AS r
+  `,
+    function (err, res) {
+      if (err) {
+        throw err;
+      } else {
+        console.table(res);
+        res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
+        // console.log(roleArray);
+      }
+    }
+  );
+
+  // let { selectedEmployee, updatedRole } = await inquirer
+  //   .prompt([
+  //     {
+  //       name: "selectedEmployee",
+  //       type: "list",
+  //       message:
+  //         "Please select the employee whose role you would like to update:",
+  //       choices: employeeArray,
+  //     },
+  //     {
+  //       name: "updatedRole",
+  //       type: "list",
+  //       message: "Please select the new role for this employee:",
+  //       choices: roleArray,
+  //     },
+  //   ])
+  //   .then((response) => {
+  //     console.log(response);
+  //   });
 }
 
 // Default response for any other request (Not Found)
