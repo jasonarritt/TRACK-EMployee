@@ -338,24 +338,59 @@ async function updateRole() {
           )
         );
         // console.log(employeeArray);
+
+        db.query(
+          `SELECT r.id, r.title
+        FROM ROLE AS r
+        `,
+          function (err, res) {
+            if (err) {
+              throw err;
+            } else {
+              console.table(res);
+              res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
+              // console.log(roleArray);
+
+              let { selectedEmployee, updatedRole } = inquirer
+                .prompt([
+                  {
+                    name: "selectedEmployee",
+                    type: "list",
+                    message:
+                      "Please select the employee whose role you would like to update:",
+                    choices: employeeArray,
+                  },
+                  {
+                    name: "updatedRole",
+                    type: "list",
+                    message: "Please select the new role for this employee:",
+                    choices: roleArray,
+                  },
+                ])
+                .then((response) => {
+                  console.log(response);
+                });
+            }
+          }
+        );
       }
     }
   );
 
-  db.query(
-    `SELECT r.id, r.title
-  FROM ROLE AS r
-  `,
-    function (err, res) {
-      if (err) {
-        throw err;
-      } else {
-        console.table(res);
-        res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
-        // console.log(roleArray);
-      }
-    }
-  );
+  // db.query(
+  //   `SELECT r.id, r.title
+  // FROM ROLE AS r
+  // `,
+  //   function (err, res) {
+  //     if (err) {
+  //       throw err;
+  //     } else {
+  //       console.table(res);
+  //       res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
+  //       // console.log(roleArray);
+  //     }
+  //   }
+  // );
 
   // let { selectedEmployee, updatedRole } = await inquirer
   //   .prompt([
