@@ -270,13 +270,13 @@ async function addEmployee() {
       {
         type: "input",
         name: "newEmployeeRole",
-        message: "What is the role of this new employee (as an integer)?",
+        message: "What is the role of this new employee (by ID number)?",
         validate: (response) => {
           if (!isNaN(response)) {
             return true;
           } else {
             console.log(
-              "Please enter the role of this new employee (as an integer)!"
+              "Please enter the role of this new employee (by ID number)!"
             );
             return false;
           }
@@ -285,13 +285,13 @@ async function addEmployee() {
       {
         type: "input",
         name: "newEmployeeManager",
-        message: "What is this new employee's manager's ID (as an integer)?",
+        message: "What is this new employee's manager's ID (by ID number)?",
         validate: (response) => {
           if (response) {
             return true;
           } else {
             console.log(
-              "Please enter this new employee's manager's ID (as an integer)!"
+              "Please enter this new employee's manager's ID (by ID number)!"
             );
             return false;
           }
@@ -324,8 +324,8 @@ async function updateRole() {
   let employeeArray = [];
   let roleArray = [];
   db.query(
-    `SELECT e.id, e.first_name, e.last_name
-  FROM employee AS e
+    `SELECT e.id, e.first_name, e.last_name, r.title AS role
+  FROM employee AS e LEFT JOIN role AS r ON e.role_id = r.id
   `,
     function (err, res) {
       if (err) {
@@ -340,7 +340,7 @@ async function updateRole() {
         // console.log(employeeArray);
 
         db.query(
-          `SELECT r.id, r.title
+          `SELECT r.id, r.title AS role
         FROM ROLE AS r
         `,
           function (err, res) {
@@ -348,7 +348,7 @@ async function updateRole() {
               throw err;
             } else {
               console.table(res);
-              res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
+              res.forEach((role) => roleArray.push(`${role.id} ${role.role}`));
               // console.log(roleArray);
 
               let { selectedEmployee, updatedRole } = inquirer
@@ -368,15 +368,15 @@ async function updateRole() {
                   },
                 ])
                 .then((response) => {
-                  console.log(response.selectedEmployee);
-                  console.log(response.updatedRole);
+                  // console.log(response.selectedEmployee);
+                  // console.log(response.updatedRole);
 
                   let selectedEmployeeInfoArray =
                     response.selectedEmployee.split(" ");
                   let updatedRoleInfoArray = response.updatedRole.split(" ");
 
-                  console.log(selectedEmployeeInfoArray);
-                  console.log(updatedRoleInfoArray);
+                  // console.log(selectedEmployeeInfoArray);
+                  // console.log(updatedRoleInfoArray);
 
                   selectedEmployeeID = selectedEmployeeInfoArray[0];
                   selectedEmployeeFullName =
@@ -384,12 +384,12 @@ async function updateRole() {
                     " " +
                     selectedEmployeeInfoArray[2];
 
-                  console.log(selectedEmployeeID, selectedEmployeeFullName);
+                  // console.log(selectedEmployeeID, selectedEmployeeFullName);
 
                   updatedRoleID = updatedRoleInfoArray[0];
                   updatedRoleTitle = updatedRoleInfoArray[1];
 
-                  console.log(updatedRoleID, updatedRoleTitle);
+                  // console.log(updatedRoleID, updatedRoleTitle);
 
                   db.query(
                     `UPDATE employee SET role_id = ${updatedRoleID} WHERE id = ${selectedEmployeeID}`,
@@ -414,41 +414,6 @@ async function updateRole() {
       }
     }
   );
-
-  // db.query(
-  //   `SELECT r.id, r.title
-  // FROM ROLE AS r
-  // `,
-  //   function (err, res) {
-  //     if (err) {
-  //       throw err;
-  //     } else {
-  //       console.table(res);
-  //       res.forEach((role) => roleArray.push(`${role.id} ${role.title}`));
-  //       // console.log(roleArray);
-  //     }
-  //   }
-  // );
-
-  // let { selectedEmployee, updatedRole } = await inquirer
-  //   .prompt([
-  //     {
-  //       name: "selectedEmployee",
-  //       type: "list",
-  //       message:
-  //         "Please select the employee whose role you would like to update:",
-  //       choices: employeeArray,
-  //     },
-  //     {
-  //       name: "updatedRole",
-  //       type: "list",
-  //       message: "Please select the new role for this employee:",
-  //       choices: roleArray,
-  //     },
-  //   ])
-  //   .then((response) => {
-  //     console.log(response);
-  //   });
 }
 
 // Default response for any other request (Not Found)
