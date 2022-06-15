@@ -368,7 +368,45 @@ async function updateRole() {
                   },
                 ])
                 .then((response) => {
-                  console.log(response);
+                  console.log(response.selectedEmployee);
+                  console.log(response.updatedRole);
+
+                  let selectedEmployeeInfoArray =
+                    response.selectedEmployee.split(" ");
+                  let updatedRoleInfoArray = response.updatedRole.split(" ");
+
+                  console.log(selectedEmployeeInfoArray);
+                  console.log(updatedRoleInfoArray);
+
+                  selectedEmployeeID = selectedEmployeeInfoArray[0];
+                  selectedEmployeeFullName =
+                    selectedEmployeeInfoArray[1] +
+                    " " +
+                    selectedEmployeeInfoArray[2];
+
+                  console.log(selectedEmployeeID, selectedEmployeeFullName);
+
+                  updatedRoleID = updatedRoleInfoArray[0];
+                  updatedRoleTitle = updatedRoleInfoArray[1];
+
+                  console.log(updatedRoleID, updatedRoleTitle);
+
+                  db.query(
+                    `UPDATE employee SET role_id = ${updatedRoleID} WHERE id = ${selectedEmployeeID}`,
+                    function (err, res) {
+                      if (err) {
+                        throw err;
+                      } else {
+                        console.log(
+                          selectedEmployeeFullName +
+                            " is now assigned the role of " +
+                            updatedRoleTitle +
+                            "!"
+                        );
+                        mainMenu();
+                      }
+                    }
+                  );
                 });
             }
           }
