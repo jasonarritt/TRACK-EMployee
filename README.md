@@ -27,6 +27,12 @@ Currently, Installing TRACK-EMployee requires a user to clone the GitHub reposit
 
 Upon starting the TRACK-EMployee application the user will be greeted with a menu offering various different options. Those options include adding and viewing departments, employees, and roles as well as updating the role of an employee. The following video provides a visual demonstration of navigating through the main menu and utilizing the different options:
 
+
+
+https://user-images.githubusercontent.com/98424788/174123158-d8e906eb-1ade-4015-8cef-b2058a9f7006.mp4
+
+
+
 ## License
 
 Copyright 2022 jasonarritt
