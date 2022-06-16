@@ -147,7 +147,7 @@ function addDepartment() {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       db.query(
         `INSERT INTO department (name) VALUES ("${response.newDepartment}")`,
         function (err, res) {
@@ -215,7 +215,7 @@ async function addRole() {
       },
     ])
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       db.query(
         `INSERT INTO role (title, salary, department_id) VALUES ("${response.newRoleTitle}", "${response.newRoleSalary}", "${response.newRoleDepartment}")`,
         function (err, res) {
@@ -299,7 +299,7 @@ async function addEmployee() {
       },
     ])
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       // if ((response.newEmployeeManager = "")) {
       //   response.newEmployeeManager = 0;
       // }
